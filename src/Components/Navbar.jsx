@@ -1,6 +1,17 @@
 import { Link } from "react-router-dom";
+import UseAuth from "../Provider/UseAuth";
 
 const Navbar = () => {
+  const {user,logout}  = UseAuth()
+  const handlelogout=()=>{
+     logout()
+     .then(result =>{
+      console.log(result.user)
+     })
+     .then(error =>{
+      console.log(error)
+     })
+  }
 
     return (
         <div className='navbar bg-base-100 shadow-sm container px-4 mx-auto'>
@@ -16,12 +27,15 @@ const Navbar = () => {
             <Link to='/'>Home</Link>
           </li>
 
-          <li>
+          {
+            !user&&<li>
             <Link to='/login'>Login</Link>
           </li>
+          }
         </ul>
 
-        <div className='dropdown dropdown-end z-50'>
+        {
+          user&&<div className='dropdown dropdown-end z-50'>
           <div
             tabIndex={0}
             role='button'
@@ -31,7 +45,7 @@ const Navbar = () => {
               <img
                 referrerPolicy='no-referrer'
                 alt='User Profile Photo'
-                src=''
+                src={user.photoURL}
               />
             </div>
           </div>
@@ -52,10 +66,11 @@ const Navbar = () => {
               <div>Bid Requests</div>
             </li>
             <li className='mt-2'>
-              <button className='bg-gray-200 block text-center'>Logout</button>
+              <button onClick={handlelogout} className='bg-gray-200 block text-center'>Logout</button>
             </li>
           </ul>
         </div>
+        }
       </div>
     </div>
     );
